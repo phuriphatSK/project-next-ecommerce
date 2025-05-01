@@ -42,6 +42,7 @@ export async function POST(request) {
       message: "Order Placed ",
     });
   } catch (error) {
+    console.error("Error creating order:", error);
     return NextResponse.json({ success: false, message: error.message });
   }
 }
