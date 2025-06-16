@@ -41,6 +41,16 @@ const MyOrders = () => {
       fetchOrders();
     }
   }, [user]);
+  const getOrderItemsText = (items) => {
+    return items
+      .filter((item) => item.product)
+      .map((item) => `${item.product.name} x ${item.quantity}`)
+      .join(", ");
+  };
+
+  const getValidItemsCount = (items) => {
+    return items.filter((item) => item.product).length;
+  };
 
   return (
     <>
@@ -65,26 +75,31 @@ const MyOrders = () => {
                     />
                     <p className="flex flex-col gap-3">
                       <span className="font-medium text-base">
-                        {order.items
-                          .map(
-                            (item) => item.product.name + ` x ${item.quantity}`
-                          )
-                          .join(", ")}
+                        {getOrderItemsText(order.items) ||
+                          "No available products"}
                       </span>
-                      <span>Items : {order.items.length}</span>
+                      <span>Items : {getValidItemsCount(order.items)}</span>
+                      {order.items.length !==
+                        getValidItemsCount(order.items) && (
+                        <span className="text-red-500 text-xs">
+                          Some products no longer available
+                        </span>
+                      )}
                     </p>
                   </div>
                   <div>
                     <p>
                       <span className="font-medium">
-                        {order.address.fullName}
+                        {order.address?.fullName || "N/A"}
                       </span>
                       <br />
-                      <span>{order.address.area}</span>
+                      <span>{order.address?.area || "N/A"}</span>
                       <br />
-                      <span>{`${order.address.city}, ${order.address.state}`}</span>
+                      <span>{`${order.address?.city || "N/A"}, ${
+                        order.address?.state || "N/A"
+                      }`}</span>
                       <br />
-                      <span>{order.address.phoneNumber}</span>
+                      <span>{order.address?.phoneNumber || "N/A"}</span>
                     </p>
                   </div>
                   <p className="font-medium my-auto">
